@@ -3,3 +3,5 @@
 # CASH
 
 Simple web applications using bash, pipes, netcat, sed and coreutils. 
+
+Run with ./server.sh
