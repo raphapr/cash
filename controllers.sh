@@ -23,3 +23,7 @@ ctrl::showmounts() {
     echo -e "$(cat /proc/mounts)"
 }
 
+ctrl::showview() {
+    local view_content=$(cat views/sample.html)
+    echo -e $view_content | view::render
+}
