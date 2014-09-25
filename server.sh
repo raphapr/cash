@@ -3,13 +3,14 @@
 source router.sh
 source models.sh
 source controllers.sh
+source views.sh
 
 PORT=8000
 
 echo -e "Starting server on port $PORT\n";
 
 # Create named pipe
-SOCKET="tmp/pipe.$$.tmp"
+SOCKET="tmp/socket.$$.tmp"
 mkfifo $SOCKET
 
 http::getparams(){
@@ -47,6 +48,7 @@ router::define GET / ctrl::root
 router::define GET /readfile ctrl::readfile
 router::define GET /writefile ctrl::writefile
 router::define GET /showmounts ctrl::showmounts
+router::define GET /showview ctrl::showview
 
 # Ok
 echo "Listening..."
