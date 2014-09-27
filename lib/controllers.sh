@@ -1,7 +1,7 @@
 # Controllers
 
 ctrl::root() {
-    local params=$1
+    local params=$1; shift
     echo "Coolio $params"
 }
 
@@ -35,4 +35,10 @@ ctrl::showview() {
    view_data["lorem_ipsum"]=$(cat views/lorem_ipsum.html)
 
    echo -e $view_content | view::render 
+}
+
+ctrl::dynamic() {
+    local params=$1; shift
+    echo "Dynamic route with params $1"
+
 }

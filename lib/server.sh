@@ -10,21 +10,7 @@ source lib/models.sh
 source lib/views.sh
 
 
-http::getparams(){
 
-    read req
-    # Parse params
-    local http_req=($req)
-    local http_route=${http_req[1]}
-
-    # TODO parse and return parameters
-    if [[ $req =~ "?" ]]; then
-        echo $req | sed "s/?/\n/" | tail -1
-    else
-        echo "Nothing."
-    fi
-
-}
 
 http::headers(){
 
@@ -56,7 +42,7 @@ http::handler() {
     local http_verb=${http_req[0]}
     local http_path=${http_req[1]} 
     local http_route=$(echo $http_path | sed "s/?/\n/" | head -1)
-    local http_params=$(echo $req | http::getparams)
+    local http_params=$(echo $req | router::getparams)
     
     # DEBUG throw request
     #echo $req
