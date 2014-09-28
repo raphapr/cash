@@ -36,8 +36,8 @@ router::parse() {
 router::match() {
     local request=$1; shift
     local route=$1; shift
-    
-    # If matching a root
+
+    # If parsed route is empty
     if [[ $request == '/' || $route == '/' ]]; then
         if [[ $route == $request ]]; then
             return 0 
@@ -49,11 +49,21 @@ router::match() {
     local parsed_request=$(echo $request | sed "s/\// /g" | sed "s/^ *//")
     local parsed_route=$(echo $route | sed "s/\// /g" | sed "s/^ *//")
 
-
+    # Number of tokens must be the same
+    if [[ $(echo $parsed_request | wc -w) != $(echo $parsed_route | wc -w) ]]; then
+        #echo "$parsed_request - $parsed_route"
+        return 1
+    fi
 
     for token in $parsed_route; do
         local hd=$(echo $parsed_request | sed "s/ .*//" )
         local tl=$(echo $parsed_request | sed "s/^\w* //" )
+        
+        # Match a param
+        if [[ $token == :* ]]; then
+            parsed_request=$tl
+            continue
+        fi
         
         # Match a route
         if [[ $token == $hd ]]; then
@@ -61,11 +71,6 @@ router::match() {
             continue
         fi
 
-        # Match a param
-        if [[ $token == :* ]]; then
-            parsed_request=$tl
-            continue
-        fi
         #echo "Does not match"
         return 1
     done
@@ -96,12 +101,13 @@ router::follow() {
     for route in ${!ROUTES[@]}; do
         if [[ $route =~ ^$method ]]; then
             #echo "Matching method for $route"
-            route_resource=$(echo $route | sed 's/^.*\//\//')
+            route_resource=$(echo $route | sed 's/^\w*\//\//')
+            #echo "$resource $route_resource"
             router::match $resource $route_resource
             if [[ $? == 0 ]]; then
                 #echo "Matching route for $route"
                 echo -e "$( ${ROUTES[$route]} $params )"
-                break
+                return 0
             else
                 #echo "It does not match" 
                 continue
@@ -111,7 +117,7 @@ router::follow() {
             continue
         fi
     done
-    #echo "No routes found"
+    echo "Not Found."
     return 1
 
 }

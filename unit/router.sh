@@ -40,8 +40,6 @@ unit::one(){
 router::when GET /one unit::one
 router::follow "GET" "/one"
 
-# TODO
-echo "This is failing because we need to parse the request and find matches"
 # Follow routes
 unit::two(){
     echo "Should follow this route also"
