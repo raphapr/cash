@@ -1,10 +1,14 @@
 #!/bin/bash
 
+# Configure
+[[ $PORT ]] || PORT=8000
+[[ $SOCKET ]] || SOCKET="tmp/socket.$$.tmp"
+
 # Require library functions
 source lib/server.sh
 
 # Require application
-source lib/controllers.sh
+source app/controllers.sh
 
 # Configure some routes
 router::when GET / ctrl::root
