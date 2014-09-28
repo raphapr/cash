@@ -1,5 +1,32 @@
 declare -A ROUTES
 
+router::headers(){
+    
+    read response_body
+    
+    declare -A http_headers
+
+    http_headers['Content-Type']="text/html"
+    http_headers['Content-Length']=${#response_body}
+
+    for header in "${!http_headers[@]}"; do
+        echo -e $header: ${http_headers[$header]}
+    done
+    
+    echo -e "\n"
+    echo -e $response_body
+}
+
+router::code() {
+
+    local code=$1; shift
+    local reason=$1; shift
+    
+    echo "HTTP/1.1 $code $reason"
+
+}
+
+# TODO parse and return parameters
 router::getparams(){
 
     read req
@@ -7,29 +34,11 @@ router::getparams(){
     local http_req=($req)
     local http_route=${http_req[1]}
 
-    # TODO parse and return parameters
     if [[ $req =~ "?" ]]; then
         echo $req | sed "s/?/\n/" | tail -1
     else
         echo "Nothing."
     fi
-
-}
-
-router::parse() {
-    local resource=$1;shift
-    local tokens=$( echo $resource | sed 's/\//\/ /g')
-    local parsed=""
-
-    for token in $tokens; do
-        if [[ ! $token =~ ^: ]]; then
-            parsed+=$token
-        else
-            parsed+=.*/
-        fi
-    done
-
-    echo $parsed
 
 }
 
@@ -106,7 +115,8 @@ router::follow() {
             router::match $resource $route_resource
             if [[ $? == 0 ]]; then
                 #echo "Matching route for $route"
-                echo -e "$( ${ROUTES[$route]} $params )"
+                router::code "200" "Ok"
+                echo -e "$( ${ROUTES[$route]} $params )" | router::headers
                 return 0
             else
                 #echo "It does not match" 
@@ -117,6 +127,7 @@ router::follow() {
             continue
         fi
     done
+    router::code "404" "Not found."
     echo "Not Found."
     return 1
 

@@ -7,27 +7,7 @@ source lib/models.sh
 source lib/views.sh
 
 
-http::headers(){
 
-    declare -A http_headers
-
-    http_headers['Content-Type']="text/html"
-
-    for header in "${!http_headers[@]}"; do
-        echo -e $header: ${http_headers[$header]}
-    done
-    
-    echo -e "\n\n"
-}
-
-http::code() {
-
-    local code=$1; shift
-    local reason=$1; shift
-
-    echo "HTTP/1.1 $code $reason"
-
-}
 
 http::handler() {
 
