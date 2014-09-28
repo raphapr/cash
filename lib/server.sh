@@ -1,15 +1,10 @@
 #!/bin/bash
     
-# Configure
-[[ $PORT ]] || PORT=8000
-[[ $SOCKET ]] || SOCKET="tmp/socket.$$.tmp"
     
 # Require framework
 source lib/router.sh
 source lib/models.sh
 source lib/views.sh
-
-
 
 
 http::headers(){
@@ -64,7 +59,7 @@ http::server() {
 
     # Enter loop
     while true; do 
-        cat $SOCKET  | nc -l -p $PORT -q 1 -i 0 | http::handler > $SOCKET
+        cat $SOCKET  | nc -l $PORT -q 1 -i 0 | http::handler > $SOCKET
     done
 
 }
