@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# Configure
-[[ $PORT ]] || PORT=8000
-[[ $SOCKET ]] || SOCKET="tmp/socket.$$.tmp"
-
 # Require library functions
 source lib/server.sh
 
@@ -20,4 +16,4 @@ router::when GET /dynamic/:id ctrl::dynamic
 router::when GET /dynamic/:id/again/:property ctrl::dynamic
 
 # Start the app
-http::server
+server::listen

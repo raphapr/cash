@@ -24,7 +24,7 @@ ctrl::showmounts() {
 }
 
 ctrl::showview() {
-   local view_content=$(cat views/sample.html)
+   local view_content=$(cat ./app/views/sample.html)
     
    # Declare some parameters in the controllers
    # as view_data and retrieve them in view::render
@@ -32,7 +32,7 @@ ctrl::showview() {
    
    view_data["koala"]="cat"
    view_data["panda"]="rabbit"
-   view_data["lorem_ipsum"]=$(cat views/lorem_ipsum.html)
+   view_data["lorem_ipsum"]=$(cat ./app/views/lorem_ipsum.html)
 
    echo -e $view_content | view::render 
 }

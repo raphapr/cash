@@ -22,11 +22,12 @@ router::code() {
     local code=$1; shift
     local reason=$1; shift
     
-    echo "HTTP/1.1 $code $reason"
+    echo -e  "HTTP/1.1 $code $reason"
 
 }
 
-# TODO parse and return parameters
+# TODO 
+# this support only get params for now
 router::getparams(){
 
     read req
@@ -128,7 +129,7 @@ router::follow() {
         fi
     done
     router::code "404" "Not found."
-    echo "Not Found."
+    echo -e "Not Found." | router::headers
     return 1
 
 }

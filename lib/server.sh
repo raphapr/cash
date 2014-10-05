@@ -1,15 +1,15 @@
 #!/bin/bash
-    
-    
+
+# Configuration
+[[ $PORT ]] || PORT=8000
+[[ $SOCKET ]] || SOCKET="tmp/socket.$$.tmp"
+
 # Require framework
 source lib/router.sh
 source lib/models.sh
 source lib/views.sh
 
-
-
-
-http::handler() {
+server::handler() {
 
     read req
 
@@ -26,10 +26,7 @@ http::handler() {
 
 }
 
-
-
-
-http::server() {
+server::listen() {
     
     # Run
     mkfifo $SOCKET
@@ -39,7 +36,7 @@ http::server() {
 
     # Enter loop
     while true; do 
-        cat $SOCKET  | nc -l $PORT -q 1 -i 0 | http::handler > $SOCKET
+        cat $SOCKET  | nc -l $PORT -q 1 -i 0 | server::handler > $SOCKET
     done
 
 }
