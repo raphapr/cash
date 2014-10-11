@@ -1,7 +1,7 @@
 # Models
 
 # Create this session model
-MODEL="models/model.$$.$RANDOM.tmp"
+MODEL="/tmp/model.$$.$RANDOM.tmp"
 touch $MODEL
 
 model::create() {
